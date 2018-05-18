@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import * as BooksAPI from "./BooksAPI";
 import ListBooks from './ListBooks';
+import LoadingSpinner from './LoadingSpinner';
 
 class SearchBooks extends Component {
   searchTimeout;
 
   state = {
     searchTerm: '',
-    foundBooks: []
+    foundBooks: [],
   };
 
   _resetBooks = () => {
@@ -22,7 +23,10 @@ class SearchBooks extends Component {
     // only search every 250ms
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
-      this.setState({ searchTerm });
+      this.setState({
+        foundBooks: 'loading',
+        searchTerm,
+      });
       if (searchTerm === '') {
         this._resetBooks();
       } else {
@@ -71,12 +75,19 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          { this.state.searchTerm !== '' && this.state.foundBooks.length > 0 &&
+          { this.state.foundBooks === 'loading' &&
+            <LoadingSpinner />
+          }
+          { this.state.searchTerm !== '' &&
+            this.state.foundBooks !== 'loading' &&
+            this.state.foundBooks.length > 0 &&
             <ListBooks
               books={this.state.foundBooks}
               onShelfChange={this.props.onShelfChange}/>
           }
-          { this.state.searchTerm !== '' && this.state.foundBooks.length === 0 &&
+          { this.state.searchTerm !== '' &&
+            this.state.foundBooks !== 'loading' &&
+            this.state.foundBooks.length === 0 &&
             <p>Could not find any books for the search term: "{this.state.searchTerm}"</p>
           }
         </div>
