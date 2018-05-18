@@ -1,42 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import BookShelf from './BookShelf';
-import * as BooksAPI from './BooksAPI';
+import PropTypes from "prop-types";
 
 class ListBooks extends Component {
-  state = {
-    books: []
-  };
-
-  componentDidMount = () => {
-    BooksAPI.getAll()
-      .then((books) => {
-        this.setState({ books });
-      })
-  };
-
-  onShelfChange = (book, shelf) => {
-    BooksAPI.update(book, shelf)
-      .then((booksByShelves) => {
-        const booksAndShelves = Object.keys(booksByShelves).reduce((obj, shelf) => {
-          booksByShelves[shelf].map((bookId) => {
-            obj[bookId] = shelf;
-            return obj;
-          });
-          return obj;
-        }, {});
-
-        this.setState((previousState) => {
-          return {
-            books: previousState.books.reduce((books, book) => {
-              book.shelf = booksAndShelves[book.id];
-              books.push(book);
-              return books;
-            }, [])
-          }
-        });
-      });
-  };
 
   render() {
     return (
@@ -49,23 +16,23 @@ class ListBooks extends Component {
             <div className="bookshelf">
               <h2 className="bookshelf-title">Currently Reading</h2>
               <BookShelf
-                books={ this.state.books }
+                books={ this.props.books }
                 shelf="currentlyReading"
-                onShelfChange={ this.onShelfChange } />
+                onShelfChange={ this.props.onShelfChange } />
             </div>
             <div className="bookshelf">
               <h2 className="bookshelf-title">Want to Read</h2>
               <BookShelf
-                books={ this.state.books }
+                books={ this.props.books }
                 shelf="wantToRead"
-                onShelfChange={ this.onShelfChange } />
+                onShelfChange={ this.props.onShelfChange } />
             </div>
             <div className="bookshelf">
               <h2 className="bookshelf-title">Read</h2>
               <BookShelf
-                books={ this.state.books }
+                books={ this.props.books }
                 shelf="read"
-                onShelfChange={ this.onShelfChange } />
+                onShelfChange={ this.props.onShelfChange } />
             </div>
           </div>
         </div>
@@ -78,5 +45,10 @@ class ListBooks extends Component {
     );
   }
 }
+
+BookShelf.propTypes = {
+  books: PropTypes.array.isRequired,
+  onShelfChange: PropTypes.func,
+};
 
 export default ListBooks;
