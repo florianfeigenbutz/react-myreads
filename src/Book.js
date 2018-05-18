@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import PropTypes from 'prop-types';
 
 class Book extends Component {
   render() {
@@ -30,5 +31,9 @@ class Book extends Component {
     );
   }
 }
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+};
 
 export default Book;
