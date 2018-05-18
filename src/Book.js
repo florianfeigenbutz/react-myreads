@@ -14,8 +14,10 @@ class Book extends Component {
     const coverStyle = {
       width: 128,
       height: 193,
-      backgroundImage: 'url("' + book.imageLinks.smallThumbnail + '")',
     };
+    if (book.imageLinks && book.imageLinks.smallThumbnail) {
+      coverStyle.backgroundImage = 'url("' + book.imageLinks.smallThumbnail + '")';
+    }
 
     return (
       <div className="book">
