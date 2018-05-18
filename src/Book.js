@@ -2,6 +2,13 @@ import React, { Component} from 'react';
 import PropTypes from 'prop-types';
 
 class Book extends Component {
+  onShelfChange = (e) => {
+    if (this.props.onShelfChange) {
+      const selectedValue = e.target.options[e.target.selectedIndex].value;
+      this.props.onShelfChange(this.props.book, selectedValue);
+    }
+  };
+
   render() {
     const { book } = this.props;
     const coverStyle = {
