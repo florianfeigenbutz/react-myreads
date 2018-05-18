@@ -27,7 +27,7 @@ class Book extends Component {
             <select
               onChange={ this.onShelfChange }
               defaultValue={ book.shelf || 'none' }>
-              <option value="none" disabled>Move to...</option>
+              <option value="unavailable" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
               <option value="read">Read</option>
