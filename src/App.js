@@ -34,10 +34,21 @@ class BooksApp extends React.Component {
             books: previousState.books.reduce((books, book) => {
               book.shelf = booksAndShelves[book.id];
               books.push(book);
+              delete booksAndShelves[book.id];
               return books;
             }, [])
           }
         });
+
+        if (Object.keys(booksAndShelves).length > 0) {
+          book.shelf = shelf;
+          this.setState((previousState) => {
+            previousState.books.push(book);
+            return {
+              books: previousState.books
+            }
+          });
+        }
       });
   };
 
