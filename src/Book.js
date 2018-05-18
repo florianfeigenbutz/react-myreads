@@ -23,7 +23,7 @@ class Book extends Component {
       <div className="book">
         <div className="book-top">
           <div className="book-cover" style={ coverStyle }></div>
-          <div className="book-shelf-changer">
+          <div className={"book-shelf-changer" + (book.shelf ? " has-shelf" : "") }>
             <select
               onChange={ this.onShelfChange }
               defaultValue={ book.shelf || 'none' }>
