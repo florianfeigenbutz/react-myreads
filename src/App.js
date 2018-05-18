@@ -12,9 +12,13 @@ class BooksApp extends React.Component {
   };
 
   componentDidMount = () => {
+    this.setState({ books: 'loading' });
     BooksAPI.getAll()
       .then((books) => {
         this.setState({ books });
+      })
+      .catch(() => {
+        this.setState({ books: [] });
       })
   };
 
