@@ -5,6 +5,8 @@ import * as BooksAPI from "./BooksAPI";
 import BookShelf from './BookShelf';
 
 class SearchBooks extends Component {
+  searchTimeout;
+
   state = {
     searchTerm: '',
     foundBooks: []
@@ -16,27 +18,32 @@ class SearchBooks extends Component {
 
   onSearchChange = (e) => {
     const searchTerm = e.target.value;
-    this.setState({ searchTerm });
-    if (searchTerm === '') {
-      this._resetBooks();
-    } else {
-      BooksAPI.search(searchTerm)
-        .then((books) => {
-          if (books.error) {
-            this._resetBooks();
-          } else {
-            this.setState({
-              foundBooks: books.map((foundBook) => {
-                const existingBook = this.props.books.filter((book) => book.id === foundBook.id).shift();
-                if (existingBook && existingBook.shelf) {
-                  foundBook.shelf = existingBook.shelf;
-                }
-                return foundBook;
-              })
-            });
-          }
-        })
-    }
+
+    // only search every 250ms
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.setState({ searchTerm });
+      if (searchTerm === '') {
+        this._resetBooks();
+      } else {
+        BooksAPI.search(searchTerm)
+          .then((books) => {
+            if (books.error) {
+              this._resetBooks();
+            } else {
+              this.setState({
+                foundBooks: books.map((foundBook) => {
+                  const existingBook = this.props.books.filter((book) => book.id === foundBook.id).shift();
+                  if (existingBook && existingBook.shelf) {
+                    foundBook.shelf = existingBook.shelf;
+                  }
+                  return foundBook;
+                })
+              });
+            }
+          })
+      }
+    }, 250);
   };
 
   render() {
