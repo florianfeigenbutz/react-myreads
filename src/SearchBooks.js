@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import * as BooksAPI from "./BooksAPI";
-import BookShelf from './BookShelf';
+import ListBooks from './ListBooks';
 
 class SearchBooks extends Component {
   searchTimeout;
@@ -72,7 +72,7 @@ class SearchBooks extends Component {
         </div>
         <div className="search-books-results">
           { this.state.searchTerm !== '' && this.state.foundBooks.length > 0 &&
-            <BookShelf
+            <ListBooks
               books={this.state.foundBooks}
               onShelfChange={this.props.onShelfChange}/>
           }

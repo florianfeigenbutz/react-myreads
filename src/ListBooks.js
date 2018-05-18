@@ -1,53 +1,37 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from "prop-types";
-import BookShelf from './BookShelf';
+import PropTypes from 'prop-types';
+import Book from './Book';
 
 class ListBooks extends Component {
-
   render() {
+    const books = this.props.books
+      .filter((book) => { return !this.props.shelf || book.shelf === this.props.shelf });
+
     return (
-      <div className="list-books">
-        <div className="list-books-title">
-          <h1>MyReads</h1>
-        </div>
-        <div className="list-books-content">
-          <div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
-              <BookShelf
-                books={ this.props.books }
-                shelf="currentlyReading"
-                onShelfChange={ this.props.onShelfChange } />
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Want to Read</h2>
-              <BookShelf
-                books={ this.props.books }
-                shelf="wantToRead"
-                onShelfChange={ this.props.onShelfChange } />
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Read</h2>
-              <BookShelf
-                books={ this.props.books }
-                shelf="read"
-                onShelfChange={ this.props.onShelfChange } />
-            </div>
-          </div>
-        </div>
-        <div className="open-search">
-          <Link
-            to="/search"
-          >Add a book</Link>
-        </div>
+      <div className="bookshelf-books">
+        {books.length > 0 &&
+        <ol className="books-grid">
+          {books.map((book) => (
+            <li key={book.id}>
+              <Book
+                book={book}
+                onShelfChange={this.props.onShelfChange}
+              />
+            </li>
+          ))}
+        </ol>
+        }
+        { books.length === 0 &&
+          <p>This shelf is currently empty.</p>
+        }
       </div>
     );
   }
 }
 
-BookShelf.propTypes = {
+ListBooks.propTypes = {
   books: PropTypes.array.isRequired,
+  shelf: PropTypes.string,
   onShelfChange: PropTypes.func,
 };
 
