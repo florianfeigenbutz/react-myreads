@@ -11,7 +11,6 @@ class ListBooks extends Component {
   componentDidMount = () => {
     BooksAPI.getAll()
       .then((books) => {
-        console.log('Received books', books);
         this.setState({ books });
       })
   };
